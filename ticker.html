@@ -1,0 +1,109 @@
+<!--HTTPS only...-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .ticker-wrap {
+    width: 100%;
+    background: #0a0a0a;
+    padding: 10px 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Fade edges */
+  .ticker-wrap::before,
+  .ticker-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 80px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .ticker-wrap::before {
+    left: 0;
+    background: linear-gradient(to right, #0a0a0a, transparent);
+  }
+  .ticker-wrap::after {
+    right: 0;
+    background: linear-gradient(to left, #0a0a0a, transparent);
+  }
+
+  .ticker-track {
+    display: flex;
+    white-space: nowrap;
+    animation: scroll 28s linear infinite;
+    will-change: transform;
+  }
+
+  .ticker-track:hover {
+    animation-play-state: paused;
+  }
+
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Arial Black', 'Arial Bold', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffffff;
+    padding-right: 0;
+  }
+
+  .divider {
+    display: inline-block;
+    margin: 0 28px;
+    color: #ff3c6f;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1;
+    vertical-align: middle;
+  }
+
+  @keyframes scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+</style>
+</head>
+<body>
+<div class="ticker-wrap">
+  <div class="ticker-track" id="track">
+    <!-- Set A -->
+    <span class="ticker-item">SUNDAY AUGUST 16TH</span>
+    <span class="divider">✦</span>
+    <span class="ticker-item">Frank Ogawa Plaza, Downtown Oakland</span>
+    <span class="divider">✦</span>
+    <span class="ticker-item">11:00 AM – 6:00 PM</span>
+    <span class="divider">✦</span>
+    <span class="ticker-item">First Hour Free & Open to the Public</span>
+    <span class="divider">✦</span>
+    <!-- Set B (duplicate for seamless loop) -->
+    <span class="ticker-item">SUNDAY AUGUST 16TH</span>
+    <span class="divider">✦</span>
+    <span class="ticker-item">Frank Ogawa Plaza, Downtown Oakland</span>
+    <span class="divider">✦</span>
+    <span class="ticker-item">11:00 AM – 6:00 PM</span>
+    <span class="divider">✦</span>
+    <span class="ticker-item">First Hour Free & Open to the Public</span>
+    <span class="divider">✦</span>
+  </div>
+</div>
+</body>
+</html
