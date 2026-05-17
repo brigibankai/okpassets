@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#19605E;color:#fff}
+.wrap{padding:12px;max-width:680px;width:100%}
+.host-bar{background:#35B6B6;border-radius:10px;padding:14px 16px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:12px;border:none;width:100%;text-align:left;transition:opacity 0.15s}
+.host-bar:hover{opacity:0.88}
+.host-badge{background:rgba(0,0,0,0.2);color:#fff;font-size:10px;font-weight:600;letter-spacing:0.08em;padding:3px 8px;border-radius:20px;white-space:nowrap;text-transform:uppercase}
+.host-label{color:#fff;font-weight:600;font-size:15px}
+.host-sub{color:rgba(255,255,255,0.75);font-size:12px;margin-top:2px}
+.host-icon{margin-left:auto;color:rgba(255,255,255,0.6);font-size:20px}
+.schedule{display:flex;flex-direction:column;gap:6px}
+.slot{display:grid;grid-template-columns:72px 1fr;align-items:center;background:#0f3f3e;border:1px solid #1f5554;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color 0.15s}
+.slot:hover{border-color:#35B6B6}
+.slot-time{padding:14px 10px;background:#0a2e2d;text-align:center;font-size:11px;font-weight:600;color:#8DE2DE;letter-spacing:0.04em;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid #1f5554}
+.slot-info{padding:12px 14px}
+.slot-name{font-size:14px;font-weight:500;color:#fff}
+.slot-detail{font-size:12px;color:#8DE2DE;margin-top:2px}
+.slot-arrow{font-size:16px;color:#35B6B6;float:right;margin-top:1px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:#0f3f3e;border:1px solid #1f5554;border-radius:18px;width:90%;max-width:480px;padding:24px;max-height:80vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:#0a2e2d;border:1px solid #1f5554;border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#8DE2DE;font-size:18px}
+.modal-close:hover{background:#19605E}
+.modal-pill{width:36px;height:4px;background:#1f5554;border-radius:4px;margin:0 auto 20px}
+.modal-avatar{width:72px;height:72px;border-radius:50%;background:#ED5C38;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;margin-bottom:14px}
+.modal-name{font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
+.modal-time{font-size:13px;color:#ED5C38;font-weight:600;margin-bottom:12px}
+.modal-bio{font-size:14px;color:#8DE2DE;line-height:1.65}
+.modal-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag{background:#0a2e2d;border:1px solid #1f5554;border-radius:20px;padding:4px 10px;font-size:12px;color:#35B6B6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <button class="host-bar" onclick="openModal('hosts')">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <span class="host-badge">All Day</span>
+        <span class="host-label">Stage Hosts</span>
+      </div>
+      <div class="host-sub">11:00 AM – 6:00 PM · Latin Stage</div>
+    </div>
+    <i class="ti ti-chevron-right host-icon" aria-hidden="true"></i>
+  </button>
+
+  <div class="schedule" id="schedule"></div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-pill"></div>
+    <button class="modal-close" onclick="closeModal()" aria-label="Close"><i class="ti ti-x" aria-hidden="true"></i></button>
+    <div class="modal-avatar" id="m-avatar"></div>
+    <div class="modal-name" id="m-name"></div>
+    <div class="modal-time" id="m-time"></div>
+    <div class="modal-bio" id="m-bio"></div>
+    <div class="modal-tags" id="m-tags"></div>
+  </div>
+</div>
+
+<script>
+const slots=[
+  {id:'s1',time:'11:00',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s2',time:'11:30',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s3',time:'12:00',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s4',time:'12:30',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s5',time:'1:00',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s6',time:'1:30',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s7',time:'2:00',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s8',time:'2:30',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s9',time:'3:00',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s10',time:'3:30',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s11',time:'4:00',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s12',time:'4:30',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s13',time:'5:00',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+  {id:'s14',time:'5:30',label:'TBD',detail:'Add performer name + genre',initials:'?',bio:'Performer info coming soon. Check back closer to the event for the full lineup announcement.',tags:['Latin Stage']},
+];
+
+const hosts={        
+  initials:'MH',
+  name:'Stage Hosts',
+  time:'11:00 AM – 6:00 PM · All Day',
+  bio:'Your Main Stage hosts keep the energy alive all day — introducing performers, hyping the crowd, and holding it down between sets. Host bios and names will be updated once confirmed.',
+  tags:['MC','All Day','Main Stage']
+};
+
+const container=document.getElementById('schedule');
+slots.forEach(s=>{
+  const el=document.createElement('div');
+  el.className='slot';
+  el.setAttribute('role','button');
+  el.setAttribute('tabindex','0');
+  el.setAttribute('aria-label',s.time+' – '+s.label);
+  el.innerHTML=`<div class="slot-time">${s.time}<br><span style="font-size:9px;margin-top:2px;display:block">PM</span></div><div class="slot-info"><div class="slot-name"><i class="ti ti-chevron-right slot-arrow" aria-hidden="true"></i>${s.label}</div><div class="slot-detail">${s.detail}</div></div>`;
+  el.onclick=()=>openModal(s.id);
+  el.onkeydown=e=>{if(e.key==='Enter'||e.key===' ')openModal(s.id)};
+  container.appendChild(el);
+});
+
+function openModal(id){
+  let d;
+  if(id==='hosts'){d=hosts;}
+  else{d=slots.find(s=>s.id===id);}
+  if(!d)return;
+  document.getElementById('m-avatar').textContent=d.initials||'?';
+  document.getElementById('m-name').textContent=d.name||d.label;
+  document.getElementById('m-time').textContent=d.time;
+  document.getElementById('m-bio').textContent=d.bio;
+  const tags=document.getElementById('m-tags');
+  tags.innerHTML='';
+  (d.tags||[]).forEach(t=>{const sp=document.createElement('span');sp.className='tag';sp.textContent=t;tags.appendChild(sp);});
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('overlay'))return;
+  document.getElementById('overlay').classList.remove('open');
+}
+</script>
+</body>
+</html>
